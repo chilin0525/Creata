@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const { Schema } = require("mongoose")
 
+const emptyUserImage = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png'
+
 const UserSchema = new Schema({
     name: {
         type: String,
@@ -13,14 +15,15 @@ const UserSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    image:{
-        tpye: String
+    url:{
+        type: String,
+        default: emptyUserImage
     },
     passwd:{
         type: String
     },
     email:{
-        type: String
+        type: String,
     }
 });
 

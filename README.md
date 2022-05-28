@@ -22,3 +22,7 @@
     GOOGLE_CALLBACK = 
     SECRET = 
     ```
+
+## issues
+
+* [ ] prevent hard code port in clinet side

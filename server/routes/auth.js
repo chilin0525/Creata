@@ -2,12 +2,11 @@ const { Router } = require('express');
 const router = Router();
 const passport = require('passport')
 const dotenv = require('dotenv');
-const User = require('../models/user')
+const User = require('../models/user');
+const { route } = require('./api');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 dotenv.config()
-
-console.log(process.env.GOOGLE_CLIENT_ID)
 
 passport.use(new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID, 
@@ -17,6 +16,7 @@ passport.use(new GoogleStrategy({
         // Get user profile info 
         console.log("Succeed to google")
         console.log(profile)
+        console.log(profile.photos[0].value)
         User.findOne({ID: profile.id}).then((IsUserExist)=>{
             // check user exist in DB or not
             if(IsUserExist){
@@ -27,8 +27,8 @@ passport.use(new GoogleStrategy({
                 new User({
                     name: profile.displayName,
                     ID: profile.id,
-                    image: profile.photos[0].value,
-                    email: profile.emails[0].value
+                    url: String(profile.photos[0].value),
+                    email: profile.emails[0].value,
                 })
                     .save()
                     .then((NewUser)=>{
@@ -67,13 +67,32 @@ router.get('/google',passport.authenticate('google', {
     scope: ['profile', 'email']
 }));
 
+// router.get('/google',(req, res)=>{
+//     console.log("find")
+//     res.send("congrate")
+// });
+
 router.get('/google/callback', 
     passport.authenticate('google', { failureRedirect: '/fail' }),
     function(req, res) {
         // Successful authentication, redirect to user profile
-        res.redirect('/profile');
+        res.redirect('http://localhost:3000');
     }
 );
+
+router.get('/user', (req, res)=>{
+    console.log(req.user)
+    // console.log(req.user.name)
+    res.send(req.user)
+    // res.send("Hello")
+})
+
+router.get('/logout', (req, res, next)=>{
+    req.logout((err)=>{
+        if(err) {return next(err);}
+        res.redirect("http://localhost:3000")
+    })
+});
 
 module.exports = router;
   
