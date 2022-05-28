@@ -1,11 +1,17 @@
 import React from "react";
+import "./Login.scss"
 
 export default class Login extends React.Component {
-    render(){
-        return (
-            <div>
-                this is Login
-            </div>
-        )
-    }
+  
+  loginWithGoogle = () => {
+    window.open("http://localhost:8000/auth/google", "_self")
+  }
+  
+  render(){
+    return (
+      <div>
+        <button className="google-signin" onClick={this.loginWithGoogle}></button>
+      </div>
+    )
+  }
 }

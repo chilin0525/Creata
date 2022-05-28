@@ -4,6 +4,7 @@ const dotenv = require('dotenv')
 const mongoose = require('mongoose');
 const session = require('express-session');
 const passport = require('passport')
+const cors = require('cors');
 
 dotenv.config()
 
@@ -15,6 +16,10 @@ mongoose
         console.log("Suceess to MongoDB")
     })
 
+app.use(cors({
+    credentials: true, 
+    origin: 'http://localhost:3000'
+}))
 app.use(bodyParser.json())
 
 // setting middleware for passport.js
@@ -33,8 +38,8 @@ app.use('/profile', require('./routes/profile'))
 
 app.use(passport.authenticate('session'));
 
-app.get("/",(req,res)=>{
-    res.sendFile("/home/chilin/Creata/client/test.html")
+app.get("/",(req, res)=>{
+    res.send("congrate!")
 })
 
 // start server listen to port number

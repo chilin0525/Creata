@@ -10,24 +10,74 @@ import Footer from "./components/Footer/Footer"
 import Home from "./pages/Home/Home"
 import Joblist from "./pages/Joblist/Joblist"
 import Login from "./pages/Login/Login"
+import Register from "./pages/Register/Register"
+import Profile from "./pages/Profile/Profile"
+import axios from 'axios'
 
 import './App.css';
+import React from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <Header/>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home/>} />
-          <Route path="/home" element={<Home/>} />
-          <Route path="/joblist" element={<Joblist/>} />
-          <Route path="/login" element={<Login/>} />
-        </Routes>
-      </BrowserRouter>
-      <Footer/>
-    </div>
-  );
+export default class App extends React.Component {
+
+  // check the user login or not
+  checkUserAuth = () =>{
+    let isUserAuth = true
+    axios
+      .get("http://localhost:8000/auth/user", 
+        { withCredentials: true }
+      )
+      .then((res)=>{
+        console.log(res.data)
+        if(!res.data){
+          // user not login!
+          isUserAuth = false
+          this.setState({isauth: false})
+        }else{
+          // user already login
+          this.setState({isauth: true})
+          this.setState({name: res.data.name})
+          this.setState({img: res.data.url})
+          this.setState({mail: res.data.email})
+          this.setState({date: res.data.date})
+        }
+      })
+    console.log(isUserAuth)
+  }
+  
+  state = {
+    isauth: false
+  }
+
+  componentDidMount(){
+    console.log("here")
+    this.checkUserAuth()
+  }
+
+  render(){
+    console.log("App render")
+    console.log(this.state)
+    console.log(this.state)
+    return (
+      <div className="App">
+        <Header isauth={this.state.isauth} />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home/>} />
+            <Route path="/home" element={<Home/>} />
+            <Route path="/joblist" element={<Joblist/>} />
+            <Route path="/login" element={<Login/>} />
+            <Route path="/register" element={<Register/>} />
+            <Route path="/profile" element={<Profile 
+                name={this.state.name} 
+                img={this.state.img}
+                mail={this.state.mail}
+                date={this.state.date}
+              />} 
+            />
+          </Routes>
+        </BrowserRouter>
+        <Footer/>
+      </div>
+    );
+  }
 }
-
-export default App;
