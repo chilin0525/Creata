@@ -33,3 +33,4 @@
 |:---|:---|:---|
 |```/auth/user```|1. Get user information <br> 2. Check user login|TBD to json|
 |```/auth/logout```|Logout user|null|
+ 

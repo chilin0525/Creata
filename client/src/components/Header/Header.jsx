@@ -1,8 +1,9 @@
 import React from "react";
 import {
-    Navbar, Nav, Container
+    Navbar, Nav, Container, NavDropdown
 } from 'react-bootstrap'
 import "./Header.scss"
+import settingIcon from "./setting.png"
 
 export default class Header extends React.Component {
 	render(){
@@ -18,7 +19,14 @@ export default class Header extends React.Component {
 						</Nav>
 						{this.props.isauth ?
 							<Nav className="ml-auto">
-								<Nav.Link href="/profile" className="nav-font">Profile</Nav.Link>
+								<NavDropdown href="/profile" className="nav-font" title={this.props.name} id="collasible-nav-dropdown">
+                  <NavDropdown.Item href="/profile" className="Dropdown-item">
+                    Profile
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href="/setting" className="Dropdown-item">
+                    Setting <img src={settingIcon} alt="" className="setting-icon"/>
+                  </NavDropdown.Item>
+                </NavDropdown>
 								<Nav.Link href="http://localhost:8000/auth/logout" className="nav-font">Logout</Nav.Link>
 							</Nav>
 						:

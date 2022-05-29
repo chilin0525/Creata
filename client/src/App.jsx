@@ -10,8 +10,11 @@ import Footer from "./components/Footer/Footer"
 import Home from "./pages/Home/Home"
 import Joblist from "./pages/Joblist/Joblist"
 import Login from "./pages/Login/Login"
+import Loginsuccess from "./pages/Login/Loginsuccess";
+import Logoutsuccess from "./pages/Login/Logoutsuccess";
 import Register from "./pages/Register/Register"
 import Profile from "./pages/Profile/Profile"
+import Setting from "./pages/Setting/Setting"
 import axios from 'axios'
 
 import './App.css';
@@ -56,18 +59,26 @@ export default class App extends React.Component {
   render(){
     console.log("App render")
     console.log(this.state)
-    console.log(this.state)
     return (
       <div className="App">
-        <Header isauth={this.state.isauth} />
+        <Header isauth={this.state.isauth} name={this.state.name} img={this.state.img} />
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home/>} />
             <Route path="/home" element={<Home/>} />
             <Route path="/joblist" element={<Joblist/>} />
             <Route path="/login" element={<Login/>} />
+            <Route path="/loginsuccess" element={<Loginsuccess/>} />
+            <Route path="/logoutsuccess" element={<Logoutsuccess/>} />
             <Route path="/register" element={<Register/>} />
             <Route path="/profile" element={<Profile 
+                name={this.state.name} 
+                img={this.state.img}
+                mail={this.state.mail}
+                date={this.state.date}
+              />} 
+            />
+            <Route path="/setting" element={<Setting
                 name={this.state.name} 
                 img={this.state.img}
                 mail={this.state.mail}
