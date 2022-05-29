@@ -26,6 +26,9 @@ export default class Header extends React.Component {
                   <NavDropdown.Item href="/setting" className="Dropdown-item">
                     Setting <img src={settingIcon} alt="" className="setting-icon"/>
                   </NavDropdown.Item>
+                  <NavDropdown.Item href="/message" className="Dropdown-item">
+                    Messages
+                  </NavDropdown.Item>
                 </NavDropdown>
 								<Nav.Link href="http://localhost:8000/auth/logout" className="nav-font">Logout</Nav.Link>
 							</Nav>

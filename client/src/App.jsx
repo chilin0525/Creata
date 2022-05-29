@@ -15,9 +15,10 @@ import Logoutsuccess from "./pages/Login/Logoutsuccess";
 import Register from "./pages/Register/Register"
 import Profile from "./pages/Profile/Profile"
 import Setting from "./pages/Setting/Setting"
+import MessagePanal from "./pages/Message/MessagePanal";
 import axios from 'axios'
 
-import './App.css';
+import './App.scss';
 import React from "react";
 
 export default class App extends React.Component {
@@ -61,33 +62,48 @@ export default class App extends React.Component {
     console.log(this.state)
     return (
       <div className="App">
-        <Header isauth={this.state.isauth} name={this.state.name} img={this.state.img} />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Home/>} />
-            <Route path="/home" element={<Home/>} />
-            <Route path="/joblist" element={<Joblist/>} />
-            <Route path="/login" element={<Login/>} />
-            <Route path="/loginsuccess" element={<Loginsuccess/>} />
-            <Route path="/logoutsuccess" element={<Logoutsuccess/>} />
-            <Route path="/register" element={<Register/>} />
-            <Route path="/profile" element={<Profile 
-                name={this.state.name} 
-                img={this.state.img}
-                mail={this.state.mail}
-                date={this.state.date}
-              />} 
-            />
-            <Route path="/setting" element={<Setting
-                name={this.state.name} 
-                img={this.state.img}
-                mail={this.state.mail}
-                date={this.state.date}
-              />} 
-            />
-          </Routes>
-        </BrowserRouter>
-        <Footer/>
+        <div className="header">
+          <Header isauth={this.state.isauth} name={this.state.name} img={this.state.img} />
+        </div>
+        <main className="main">
+          <div className="main-content">
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Home/>} />
+              <Route path="/home" element={<Home/>} />
+              <Route path="/joblist" element={<Joblist/>} />
+              <Route path="/login" element={<Login/>} />
+              <Route path="/loginsuccess" element={<Loginsuccess/>} />
+              <Route path="/logoutsuccess" element={<Logoutsuccess/>} />
+              <Route path="/register" element={<Register/>} />
+              <Route path="/profile" element={<Profile 
+                  name={this.state.name} 
+                  img={this.state.img}
+                  mail={this.state.mail}
+                  date={this.state.date}
+                />} 
+              />
+              <Route path="/setting" element={<Setting
+                  name={this.state.name} 
+                  img={this.state.img}
+                  mail={this.state.mail}
+                  date={this.state.date}
+                />} 
+              />
+              <Route path="/message" element={<MessagePanal
+                  name={this.state.name} 
+                  img={this.state.img}
+                  mail={this.state.mail}
+                  date={this.state.date}
+                />} 
+              />
+            </Routes>
+          </BrowserRouter>
+          </div>
+        </main>
+        {/* <div>
+          <Footer className="footer"/>
+        </div> */}
       </div>
     );
   }

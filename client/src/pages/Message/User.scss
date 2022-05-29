@@ -1,0 +1,31 @@
+.user-panel{
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.user-item{
+    display: flex;
+    flex-direction: row;
+    
+    cursor: pointer;
+
+    &:hover{
+        background-color: #4b4b4b;
+    }
+
+    padding: 1rem;
+    
+    .user-img{
+        width: 13%;
+        border-radius: 50%;
+        // margin: 1rem;
+    }
+
+    .user-info{
+        color: white;
+        padding: 1rem;
+    }
+}
+

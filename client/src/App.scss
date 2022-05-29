@@ -1,0 +1,25 @@
+.App{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+
+    .header{
+        height: 10vh;
+    }
+
+    .main{
+        height: 90vh;
+        // flex-grow: 1;
+        .main-content{
+            height: 100%;
+            // overflow: auto;
+            overflow: hidden
+        }
+    }
+
+    .footer{
+        height: 5vh;
+        position: sticky;
+    }
+}
