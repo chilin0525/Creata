@@ -2,6 +2,7 @@ import React from "react";
 import User from "./User"
 import Message from "./Message"
 import "./MessagePanal.scss"
+import sendIcon from "./send.png"
 
 export default class MessagePanal extends React.Component {
   render(){
@@ -44,8 +45,11 @@ export default class MessagePanal extends React.Component {
               <Message role="receiver"/>
             </div>
             <div className="user-input">
-              <label>message</label>
+              {/* <label>message</label> */}
               <input></input>
+              <div className="send-icon">
+                <img src={sendIcon}/>
+              </div>
             </div>
           </div>
         </div>
