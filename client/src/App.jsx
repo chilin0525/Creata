@@ -25,7 +25,7 @@ export default class App extends React.Component {
 
   // check the user login or not
   checkUserAuth = () =>{
-    let isUserAuth = true
+    console.log("this is checkUserAuth")
     axios
       .get("http://localhost:8000/auth/user", 
         { withCredentials: true }
@@ -34,27 +34,126 @@ export default class App extends React.Component {
         console.log(res.data)
         if(!res.data){
           // user not login!
-          isUserAuth = false
           this.setState({isauth: false})
         }else{
           // user already login
+          console.log(res.data)
           this.setState({isauth: true})
+          this.setState({userid: res.data._id})
           this.setState({name: res.data.name})
           this.setState({img: res.data.url})
           this.setState({mail: res.data.email})
           this.setState({date: res.data.date})
         }
       })
-    console.log(isUserAuth)
+  }
+
+  getMessage = ()=>{
+    console.log("this is getMessage")
+    console.log(this.state)
+    if(this.state.isauth){
+      axios
+        .post("http://localhost:8000/message", 
+          { userid: this.state._id }
+        )
+        .then((res)=>{
+          console.log(res.data)
+          this.setState({messages: res.data})
+        })
+    }
   }
   
   state = {
     isauth: false
   }
 
-  componentDidMount(){
+  async componentDidMount(){
+    console.log("Mount App componet")
+    const resUser = await axios
+      .get("http://localhost:8000/auth/user", 
+        { withCredentials: true }
+      )
     console.log("here")
-    this.checkUserAuth()
+    console.log(resUser.data)
+
+    // the result is sorted, early shold more little index
+    const resMessage = await axios
+      .post("http://localhost:8000/message", 
+        { userid: resUser.data._id }
+      )
+    
+    console.log("messages ===")
+    console.log(resMessage.data)
+
+    // little index represent chatting more early
+    let chatId = []
+    for(let i=resMessage.data.length-1;i>=0;i--){
+      if(resMessage.data[i].sender_ID==resUser.data._id){
+        if(!chatId.includes(resMessage.data[i].receiver_ID)){
+          chatId.push(resMessage.data[i].receiver_ID)
+        }
+      }else{
+        if(!chatId.includes(resMessage.data[i].sender_ID)){
+          chatId.push(resMessage.data[i].sender_ID)
+        }
+      }
+    }
+    console.log("Chat ID")
+    console.log(chatId)
+
+    // using native way to create request 
+    // (cause post method not support to send array)
+
+    const payload = {
+      user_ids: chatId
+    };
+
+    const chatUserInfo = await axios({
+      url: "http://localhost:8000/message/userinfo",
+      method: "post",
+      data: payload
+    })
+
+    let userName2Img={}
+    for(let i=0;i<chatUserInfo.data.length;i++){
+      userName2Img[chatUserInfo.data[i].id]=chatUserInfo.data[i].url
+    }
+    console.log(userName2Img)
+
+    console.log(chatUserInfo)
+
+    // const resChatIdInfo = await axios
+    //   .post("http://localhost:8000/message/userinfo", 
+    //     // { chatidList: chatId }
+    //   )
+    // console.log("response chat id info")
+    // console.log(resChatIdInfo)
+    
+    if(!resUser.data){
+      // user not login!
+      this.setState({isauth: false})
+    }else{
+      // user already login
+      this.setState({isauth: true})
+      this.setState({userid: resUser.data._id})
+      this.setState({name: resUser.data.name})
+      this.setState({img: resUser.data.url})
+      this.setState({mail: resUser.data.email})
+      this.setState({date: resUser.data.date})
+    }
+    
+    if(resMessage.data){
+      this.setState({messages: resMessage.data})
+    }else{
+      console.log("Empty Message")
+    }
+
+    if(chatUserInfo.data){
+      this.setState({chatuserinfo: chatUserInfo.data})
+      this.setState({userName2Img: userName2Img})
+    }else{
+      console.log("Empty Message")
+    }
   }
 
   render(){
@@ -91,10 +190,14 @@ export default class App extends React.Component {
                 />} 
               />
               <Route path="/message" element={<MessagePanal
+                  userid={this.state.userid}
                   name={this.state.name} 
                   img={this.state.img}
                   mail={this.state.mail}
                   date={this.state.date}
+                  messages={this.state.messages}
+                  chatuser={this.state.chatuserinfo}
+                  userName2Img={this.state.userName2Img}
                 />} 
               />
             </Routes>
