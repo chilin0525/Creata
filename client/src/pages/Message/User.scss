@@ -3,6 +3,13 @@
 
     display: flex;
     flex-direction: column;
+
+    .chatting{
+        background-color: #4b4b4b;
+    }
+    .none{
+        background-color: #343a40;
+    }
 }
 
 .user-item{

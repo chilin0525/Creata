@@ -37,7 +37,6 @@ export default class App extends React.Component {
           this.setState({isauth: false})
         }else{
           // user already login
-          console.log(res.data)
           this.setState({isauth: true})
           this.setState({userid: res.data._id})
           this.setState({name: res.data.name})
@@ -48,23 +47,58 @@ export default class App extends React.Component {
       })
   }
 
-  getMessage = ()=>{
-    console.log("this is getMessage")
-    console.log(this.state)
-    if(this.state.isauth){
-      axios
-        .post("http://localhost:8000/message", 
-          { userid: this.state._id }
-        )
-        .then((res)=>{
-          console.log(res.data)
-          this.setState({messages: res.data})
-        })
-    }
-  }
-  
   state = {
-    isauth: false
+    isauth: false,
+  }
+
+  queryUserMessagebyID = (newMessages) => {
+    let chatId = []
+    for(let i=0;i<newMessages.length;i++){
+      if(newMessages[i].sender_ID===this.state.userid){
+        if(!chatId.includes(newMessages[i].receiver_ID)){
+          chatId.push(newMessages[i].receiver_ID)
+        }
+      }else{
+        if(!chatId.includes(newMessages[i].sender_ID)){
+          chatId.push(newMessages[i].sender_ID)
+        }
+      }
+    }
+    return chatId
+  }
+
+  // when user click send button in chatroom
+  // send all messages back to here
+  // and udpate to state.message
+  updateMessageAfterSend = async (newMessages)=>{
+    await this.setState({messages: newMessages})
+
+    const chatId = await this.queryUserMessagebyID(newMessages)
+    
+    // using native way to create request 
+    // (cause post method not support to send array)
+    const payload = {
+      user_ids: chatId
+    };
+    
+    console.log("message update")
+    console.log(newMessages)
+    console.log(chatId)
+
+    // query for user name, user image from user id list
+    const chatUserInfo = await axios({
+      url: "http://localhost:8000/message/userinfo",
+      method: "post",
+      data: payload
+    })
+
+    let userName2Img={}
+    for(let i=0;i<chatUserInfo.data.length;i++){
+      userName2Img[chatUserInfo.data[i].id]=chatUserInfo.data[i].url
+    }
+    
+    this.setState({chatuserinfo: chatUserInfo.data})
+    this.setState({userName2Img: userName2Img})
   }
 
   async componentDidMount(){
@@ -81,14 +115,12 @@ export default class App extends React.Component {
       .post("http://localhost:8000/message", 
         { userid: resUser.data._id }
       )
-    
-    console.log("messages ===")
-    console.log(resMessage.data)
 
-    // little index represent chatting more early
+    // little index of resMessage.data represent chatting recently
+    // hence little index of chatId represent chatting recently
     let chatId = []
-    for(let i=resMessage.data.length-1;i>=0;i--){
-      if(resMessage.data[i].sender_ID==resUser.data._id){
+    for(let i=0;i<resMessage.data.length;i++){
+      if(resMessage.data[i].sender_ID===resUser.data._id){
         if(!chatId.includes(resMessage.data[i].receiver_ID)){
           chatId.push(resMessage.data[i].receiver_ID)
         }
@@ -98,16 +130,15 @@ export default class App extends React.Component {
         }
       }
     }
-    console.log("Chat ID")
     console.log(chatId)
 
     // using native way to create request 
     // (cause post method not support to send array)
-
     const payload = {
       user_ids: chatId
     };
 
+    // query for user name, user image from user id list
     const chatUserInfo = await axios({
       url: "http://localhost:8000/message/userinfo",
       method: "post",
@@ -158,7 +189,7 @@ export default class App extends React.Component {
 
   render(){
     console.log("App render")
-    console.log(this.state)
+    console.log(this.state.messages)
     return (
       <div className="App">
         <div className="header">
@@ -198,6 +229,7 @@ export default class App extends React.Component {
                   messages={this.state.messages}
                   chatuser={this.state.chatuserinfo}
                   userName2Img={this.state.userName2Img}
+                  updateMessageAfterSend={this.updateMessageAfterSend}
                 />} 
               />
             </Routes>

@@ -7,7 +7,7 @@ export default class MessageEmpty extends React.Component {
     console.log("here is empty")
     return (
       <div className="emptyImg-container">       
-          <img src="https://i.pinimg.com/originals/54/85/6a/54856ab427f28a0b40b1a305792a3b00.png"></img>
+          <img alt="empty" src="https://i.pinimg.com/originals/54/85/6a/54856ab427f28a0b40b1a305792a3b00.png"></img>
       </div>
     )
   }
