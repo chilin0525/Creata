@@ -9,6 +9,7 @@ import axios from 'axios'
 export default class MessagePanal extends React.Component {
 
   inputRef = React.createRef()
+  scrollbarRef = React.createRef()
 
   state = {
     chatid: null,
@@ -16,6 +17,8 @@ export default class MessagePanal extends React.Component {
 
   sendMessageHandler = (e)=>{
     if(this.state.sendMessage){
+      // when user click to send message to other user
+      // 1. send sender, receiver id and message to backend
       axios
         .post("http://localhost:8000/message/sendmessage", { 
             message: this.state.sendMessage ,
@@ -23,6 +26,8 @@ export default class MessagePanal extends React.Component {
             receiver_ID: this.state.chatid
           }
         )
+      // 2. get response of update messages of about current user
+      //    call parent handler with all message for update state
         .then((res)=>{
           console.log("send done")
           this.props.updateMessageAfterSend(res.data)
@@ -34,15 +39,27 @@ export default class MessagePanal extends React.Component {
     this.setState({sendMessage: e.target.value})
   }
 
+  // when click any chated user of left panel 
+  // update state represent chatting with the user
+  // init value: null => show empty message componet
   clickHandler = (userid) => {
-    console.log(userid)
     this.setState({chatid: userid})
+  }
+
+  // 1. We need to update scrollbar after sending message
+  //    if we not do this, scollbar will stop at last message
+  //    hence we cannot see newer message after sending
+  // 2. user-friendly
+  //    We need to fix scrollbar at bottom cause the bottom side represent newer message
+  //    so the user see newer message when he click the user
+  componentDidUpdate(){
+    this.scrollbarRef.current.scrollTop = this.scrollbarRef.current.scrollHeight - this.scrollbarRef.current.clientHeight;
   }
 
   render(){
     console.log("message panel render")
     // console.log(this.props)
-    console.log(this.props.messages)
+    // console.log(this.props.messages)
     return (
       <div>
         <div className="horizontal-line" ></div>
@@ -61,7 +78,7 @@ export default class MessagePanal extends React.Component {
           </div>
           <div className="vertical-line"></div>
           <div className="MessagePanel-chatroom">
-            <div className="messages">
+            <div className="messages" ref={this.scrollbarRef}>
               {/* <Message role="sender"/> */}
               {/* <Message role="receiver"/>
               <Message role="sender"/>
