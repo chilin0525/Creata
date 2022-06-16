@@ -20,6 +20,7 @@ import axios from 'axios'
 
 import './App.scss';
 import React from "react";
+const { io } = require("socket.io-client");
 
 export default class App extends React.Component {
 
@@ -71,6 +72,7 @@ export default class App extends React.Component {
   // send all messages back to here
   // and udpate to state.message
   updateMessageAfterSend = async (newMessages)=>{
+    console.log('updateMessageAfterSend')
     await this.setState({messages: newMessages})
 
     const chatId = await this.queryUserMessagebyID(newMessages)
@@ -80,10 +82,6 @@ export default class App extends React.Component {
     const payload = {
       user_ids: chatId
     };
-    
-    console.log("message update")
-    console.log(newMessages)
-    console.log(chatId)
 
     // query for user name, user image from user id list
     const chatUserInfo = await axios({
@@ -103,6 +101,11 @@ export default class App extends React.Component {
 
   async componentDidMount(){
     console.log("Mount App componet")
+    
+    const socket = await io("http://localhost:8000", {
+      withCredentials: true
+    });
+
     const resUser = await axios
       .get("http://localhost:8000/auth/user", 
         { withCredentials: true }
@@ -149,9 +152,8 @@ export default class App extends React.Component {
     for(let i=0;i<chatUserInfo.data.length;i++){
       userName2Img[chatUserInfo.data[i].id]=chatUserInfo.data[i].url
     }
-    console.log(userName2Img)
-
-    console.log(chatUserInfo)
+    // console.log(userName2Img)
+    // console.log(chatUserInfo)
 
     // const resChatIdInfo = await axios
     //   .post("http://localhost:8000/message/userinfo", 
@@ -171,6 +173,7 @@ export default class App extends React.Component {
       this.setState({img: resUser.data.url})
       this.setState({mail: resUser.data.email})
       this.setState({date: resUser.data.date})
+      socket.emit("addUserid", resUser.data._id)
     }
     
     if(resMessage.data){
@@ -188,8 +191,9 @@ export default class App extends React.Component {
   }
 
   render(){
+
     console.log("App render")
-    console.log(this.state.messages)
+    // console.log(this.state.messages)
     return (
       <div className="App">
         <div className="header">

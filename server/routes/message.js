@@ -4,9 +4,6 @@ const Message = require('../models/message');
 const User = require('../models/user');
 
 router.post("/", (req, res)=>{
-    console.log("Hi this is message")
-    console.log(req.body.userid)
-    console.log(req.body.userid==null)
     const userid = req.body.userid
     if(req.body.userid!=null){
         Message.find({$or:[{'sender_ID':userid}, {'receiver_ID':userid}]}).
@@ -31,26 +28,18 @@ async function queryUserFromArray(userArray){
             tmpUserInfo.name = userinfo[0].name
             tmpUserInfo.url = userinfo[0].url
             resUserInfo.push(tmpUserInfo)
-            console.log(tmpUserInfo)
         });
     }
-    console.log(resUserInfo)
     return resUserInfo;
 }
 
 router.post("/userinfo", async(req, res)=>{
-    console.log("Hi this is message/userinfo")
-    console.log(req.body)
-
     const resUserInfo = await queryUserFromArray(req.body.user_ids)
-    
-    console.log(resUserInfo)
     res.send(resUserInfo)
 })
 
 router.post("/sendmessage", async(req, res)=>{
-    console.log("Hi this is message/sendmessage")
-    
+
     const sender_ID = req.body.sender_ID
     const receiver_ID = req.body.receiver_ID
 

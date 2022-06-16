@@ -15,8 +15,8 @@ passport.use(new GoogleStrategy({
     }, function(accessToken, refreshToken, profile, done) {
         // Get user profile info 
         console.log("Succeed to google")
-        console.log(profile)
-        console.log(profile.photos[0].value)
+        // console.log(profile)
+        // console.log(profile.photos[0].value)
         User.findOne({ID: profile.id}).then((IsUserExist)=>{
             // check user exist in DB or not
             if(IsUserExist){
@@ -47,7 +47,7 @@ passport.serializeUser(function(user, cb) {
 });
   
 passport.deserializeUser(function(id, cb) {
-    console.log("Deserialize")
+    // console.log("Deserialize")
     User.findById(id).then((user) => {
         console.log("found user")
         cb(null, user);
@@ -81,7 +81,7 @@ router.get('/google/callback',
 );
 
 router.get('/user', (req, res)=>{
-    console.log(req.user)
+    // console.log(req.user)
     // console.log(req.user.name)
     res.send(req.user)
     // res.send("Hello")
