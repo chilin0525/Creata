@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 
 import Header from "./components/Header/Header"
-import Footer from "./components/Footer/Footer"
+// import Footer from "./components/Footer/Footer"
 
 import Home from "./pages/Home/Home"
 import Joblist from "./pages/Joblist/Joblist"
@@ -14,6 +14,7 @@ import Loginsuccess from "./pages/Login/Loginsuccess";
 import Logoutsuccess from "./pages/Login/Logoutsuccess";
 import Register from "./pages/Register/Register"
 import Profile from "./pages/Profile/Profile"
+import SettingSuccess from "./pages/Setting/SettingSuccess"
 import Setting from "./pages/Setting/Setting"
 import MessagePanal from "./pages/Message/MessagePanal";
 import axios from 'axios'
@@ -25,28 +26,28 @@ const { io } = require("socket.io-client");
 export default class App extends React.Component {
 
   // check the user login or not
-  checkUserAuth = () =>{
-    console.log("this is checkUserAuth")
-    axios
-      .get("http://localhost:8000/auth/user", 
-        { withCredentials: true }
-      )
-      .then((res)=>{
-        console.log(res.data)
-        if(!res.data){
-          // user not login!
-          this.setState({isauth: false})
-        }else{
-          // user already login
-          this.setState({isauth: true})
-          this.setState({userid: res.data._id})
-          this.setState({name: res.data.name})
-          this.setState({img: res.data.url})
-          this.setState({mail: res.data.email})
-          this.setState({date: res.data.date})
-        }
-      })
-  }
+  // checkUserAuth = () =>{
+  //   console.log("this is checkUserAuth")
+  //   axios
+  //     .get("http://localhost:8000/auth/user", 
+  //       { withCredentials: true }
+  //     )
+  //     .then((res)=>{
+  //       console.log(res.data)
+  //       if(!res.data){
+  //         // user not login!
+  //         this.setState({isauth: false})
+  //       }else{
+  //         // user already login
+  //         this.setState({isauth: true})
+  //         this.setState({userid: res.data._id})
+  //         this.setState({name: res.data.name})
+  //         this.setState({img: res.data.url})
+  //         this.setState({mail: res.data.email})
+  //         this.setState({date: res.data.date})
+  //       }
+  //     })
+  // }
 
   state = {
     isauth: false,
@@ -173,6 +174,9 @@ export default class App extends React.Component {
       this.setState({img: resUser.data.url})
       this.setState({mail: resUser.data.email})
       this.setState({date: resUser.data.date})
+      this.setState({phone: resUser.data.phone})
+      this.setState({experience: resUser.data.experience})
+      this.setState({website: resUser.data.website})
       socket.emit("addUserid", resUser.data._id)
     }
     
@@ -209,15 +213,20 @@ export default class App extends React.Component {
               <Route path="/login" element={<Login/>} />
               <Route path="/loginsuccess" element={<Loginsuccess/>} />
               <Route path="/logoutsuccess" element={<Logoutsuccess/>} />
+              <Route path="/settingsuccess" element={<SettingSuccess/>} />
               <Route path="/register" element={<Register/>} />
-              <Route path="/profile" element={<Profile 
+              <Route path="/profile/*" element={<Profile 
                   name={this.state.name} 
                   img={this.state.img}
                   mail={this.state.mail}
                   date={this.state.date}
-                />} 
-              />
+                  phone={this.state.phone}
+                  experience={this.state.experience}
+                  website={this.state.website}
+                />}>
+              </Route>
               <Route path="/setting" element={<Setting
+                  userid={this.state.userid}
                   name={this.state.name} 
                   img={this.state.img}
                   mail={this.state.mail}

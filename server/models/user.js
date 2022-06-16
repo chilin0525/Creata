@@ -24,6 +24,19 @@ const UserSchema = new Schema({
     },
     email:{
         type: String,
+    },
+    phone:{
+        type: String,
+    },
+    website:{
+        type: Array,
+    },
+    experience:{
+        type: Array,
+    },
+    cv:{
+        data: Buffer,
+        contentType: String
     }
 });
 
