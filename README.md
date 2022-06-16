@@ -2,6 +2,7 @@
 
 ## server
 
+* please check your DB serivce is running before running
 * prepare env file: ```.env``` 
     ```
     .
