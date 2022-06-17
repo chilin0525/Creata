@@ -9,8 +9,10 @@ export default class Login extends React.Component {
   
   render(){
     return (
-      <div>
-        <button className="google-signin" onClick={this.loginWithGoogle}></button>
+      <div className="login-container">
+        <div className="login-child-container">
+          <button className="google-signin" onClick={this.loginWithGoogle}></button>
+        </div>
       </div>
     )
   }

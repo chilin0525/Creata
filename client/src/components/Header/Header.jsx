@@ -15,9 +15,15 @@ export default class Header extends React.Component {
 					<Navbar.Collapse id="responsive-navbar-nav">
 						<Nav>
 							<Nav.Link href="/joblist" className="nav-font">職缺資料</Nav.Link>
-							<Nav.Link href="#deets" className="nav-font">新創公司專欄</Nav.Link>
+							<Nav.Link href="/companylist" className="nav-font">新創公司專欄</Nav.Link>
+							{this.props.isauth ?
+								<Nav.Link href="/companyadd" className="nav-font">新增專欄</Nav.Link>
+							:
+								<div></div>
+							}	
 						</Nav>
 						{this.props.isauth ?
+						
 							<Nav className="ml-auto">
 								<NavDropdown href="/profile" className="nav-font" title={this.props.name} id="collasible-nav-dropdown">
                   <NavDropdown.Item href="/profile" className="Dropdown-item">

@@ -46,6 +46,7 @@ app.use('/api', require('./routes/api'))
 app.use('/auth', require('./routes/auth'))
 app.use('/profile', require('./routes/profile'))
 app.use('/message', require('./routes/message'))
+app.use('/company', require('./routes/company'))
 
 app.use(passport.authenticate('session'));
 

@@ -1,0 +1,13 @@
+.company-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .form-container{
+        padding-right: 10px;
+        padding-top: 10px;
+        width: 70%;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+}

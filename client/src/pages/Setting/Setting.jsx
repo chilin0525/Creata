@@ -6,7 +6,6 @@ import axios from 'axios'
 
 
 export default class Setting extends React.Component{
-  scrollbarRef = React.createRef()
   
   state = {
     numberOfWebsite: 1,
@@ -43,16 +42,16 @@ export default class Setting extends React.Component{
     
     // work around way to store multiple onchange data to Array
     for(let i=0;i<this.state.numberOfWebsite;i++){
-      if(e.target["website"+String(i)].value==''){continue;}
+      if(e.target["website"+String(i)].value===''){continue;}
       websiteArr.push(e.target["website"+String(i)].value)
     }
 
     for(let i=0;i<this.state.numberOfExperience;i++){
       if(
-        e.target["experience_name"+String(i)].value  =='' ||
-        e.target["experience_start"+String(i)].value =='' ||
-        e.target["experience_end"+String(i)].value   =='' ||
-        e.target["experience_txt"+String(i)].value   ==''
+        e.target["experience_name"+String(i)].value  ==='' ||
+        e.target["experience_start"+String(i)].value ==='' ||
+        e.target["experience_end"+String(i)].value   ==='' ||
+        e.target["experience_txt"+String(i)].value   ===''
       ){continue;}
       const tmp = {
         "work": e.target["experience_name"+String(i)].value,
@@ -62,11 +61,6 @@ export default class Setting extends React.Component{
       }
       experienceArr.push(tmp)
     }
-
-    console.log(this.state)
-    console.log(websiteArr)
-    console.log(experienceArr)
-    console.log(e.target.cv.files[0])
 
     // Attention key here, cause we using the json to write back to DB on backend 
     // so the key must same us model of user
@@ -96,12 +90,6 @@ export default class Setting extends React.Component{
     }
   }
 
-  componentDidUpdate(){
-    if(!this.state.checkset){
-      this.scrollbarRef.current.scrollTop = this.scrollbarRef.current.scrollHeight - this.scrollbarRef.current.clientHeight;
-    }
-  }
-
   render(){
     console.log(this.state)
     return (
@@ -112,7 +100,7 @@ export default class Setting extends React.Component{
         <Navigate to='/settingsuccess' replace/>
       :
       <div className="setting-container">
-        <Form className="form-container" onSubmit={this.submitHandler} ref={this.scrollbarRef} encType="multipart/form-data">
+        <Form className="form-container" onSubmit={this.submitHandler} encType="multipart/form-data">
           <Form.Group className="mb-3">
             <Form.Label>User name</Form.Label>
             <Form.Control type="text" placeholder="Enter username" onChange={this.udpateInput2State("username")} />

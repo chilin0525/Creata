@@ -1,0 +1,16 @@
+.company-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    .company-child-container{
+        width: 70%;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .company-card{
+        margin-top: 10px;
+        cursor: pointer;
+    }
+}

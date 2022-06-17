@@ -9,6 +9,8 @@ import Header from "./components/Header/Header"
 
 import Home from "./pages/Home/Home"
 import Joblist from "./pages/Joblist/Joblist"
+import Company from "./pages/Company/Company"
+import CompanyAdd from "./pages/Company/CompanyAdd"
 import Login from "./pages/Login/Login"
 import Loginsuccess from "./pages/Login/Loginsuccess";
 import Logoutsuccess from "./pages/Login/Logoutsuccess";
@@ -210,6 +212,16 @@ export default class App extends React.Component {
               <Route path="/" element={<Home/>} />
               <Route path="/home" element={<Home/>} />
               <Route path="/joblist" element={<Joblist/>} />
+              <Route path="/companylist" element={<Company
+                  companydata={this.state.companydata}
+                />} 
+              />
+              <Route path="/companyadd" element={<CompanyAdd
+                  userid={this.state.userid}
+                  name={this.state.name} 
+                  img={this.state.img}
+                />} 
+              />
               <Route path="/login" element={<Login/>} />
               <Route path="/loginsuccess" element={<Loginsuccess/>} />
               <Route path="/logoutsuccess" element={<Logoutsuccess/>} />
