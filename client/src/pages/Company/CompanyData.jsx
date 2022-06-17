@@ -1,17 +1,46 @@
 import React from "react";
 import {Table, Button} from "react-bootstrap"
+import  { Navigate } from 'react-router-dom'
 import axios from 'axios'
 
 import "./CompanyData.scss"
 
 export default class CompanyData extends React.Component {
   
+  state = {
+    sendMessage: false
+  }
+
+  clickHandler = (e)=>{
+    console.log("clook")
+    console.log(`sender: ${this.props.userid} receiver ${this.props.company.authorID}`)
+    const message = `Hi ${this.props.company.authorName}!`
+    axios
+        .post("http://localhost:8000/message/sendmessage", { 
+            message: message ,
+            sender_ID: this.props.userid,
+            receiver_ID: this.props.company.authorID
+          }
+        )
+        .then((res)=>{
+          console.log("send done")
+          this.props.updateMessageAfterSend(res.data)
+          this.setState({sendMessage:true})
+        })
+  }
 
   render(){
+    console.log("company data")
     console.log(this.props)
-    console.log(this.props.company._id)
     return (    
       <div className="companydata-container">
+        {
+          this.state.sendMessage
+          ?
+            <Navigate to='/message' replace/>
+          :
+            <div></div>
+        }
         <div className="companydata-child-container">
         {
           <Table striped bordered hover className="companydata-table">
@@ -26,7 +55,7 @@ export default class CompanyData extends React.Component {
                 <td className="user-container">
                   <img src={this.props.company.authorUrl} className="user-img"></img>
                   {this.props.company.authorName}
-                  <button>Chat with </button>
+                  <button onClick={this.clickHandler}>Chat</button>
                 </td>
               </tr>
 

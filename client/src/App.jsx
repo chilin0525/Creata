@@ -113,7 +113,6 @@ export default class App extends React.Component {
       .get("http://localhost:8000/auth/user", 
         { withCredentials: true }
       )
-    console.log("here")
     console.log(resUser.data)
 
     // the result is sorted, early shold more little index
@@ -214,6 +213,8 @@ export default class App extends React.Component {
               <Route path="/joblist" element={<Joblist/>} />
               <Route path="/companylist" element={<Company
                   companydata={this.state.companydata}
+                  userid={this.state.userid}
+                  updateMessageAfterSend={this.updateMessageAfterSend}
                 />} 
               />
               <Route path="/companyadd" element={<CompanyAdd

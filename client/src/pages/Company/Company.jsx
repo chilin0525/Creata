@@ -28,12 +28,15 @@ export default class Company extends React.Component {
   }
 
   render(){
-    console.log(this.state)
     return (
       <div>
       {
         this.state.click?
-          <CompanyData company={this.state.clickcompany}/>
+          <CompanyData 
+            company={this.state.clickcompany} 
+            userid={this.props.userid}
+            updateMessageAfterSend={this.props.updateMessageAfterSend}
+          />
         :
           <div className="company-container">
             <div className="company-child-container">
